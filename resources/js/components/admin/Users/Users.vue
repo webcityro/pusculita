@@ -1,12 +1,11 @@
 <template>
 	<div class="card">
-		<div class="card-header">Affiliate links</div>
+		<div class="card-header">Users</div>
 		<div class="card-body">
 			<div class="row justify-content-center">
 				<div class="col-12 text-right">
 					<a href="#" class="btn btn-primary" @click.prevent="showForm = true">
-						<i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Add affiliate link
-					</a>
+						<i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Add user</a>
 				</div>
 			</div>
 			<!-- Search -->
@@ -15,28 +14,40 @@
 				:url="fetchUrl"
 				:params="{
 					search: {
+						id: '',
 						name: '',
-						originalURL: '',
-						affiliateURL: ''
+						email: '',
+						rome: '',
 					}
 				}"
 				:inputs="{
+					id: {
+						label: 'ID',
+						type: 'text'
+					},
 					name: {
 						label: 'Name',
 						type: 'text'
 					},
-					originalURL: {
-						label: 'Original URL',
+					email: {
+						label: 'Email',
 						type: 'text'
 					},
-					affiliateURL: {
-						label: 'Link',
-						type: 'text'
+					role: {
+						label: 'Role',
+						type: 'select',
+						options:  {
+							'': '',
+							user: 'User',
+							admin: 'Admin'
+						}
 					}
 				}"
 				:order-by="{
 					id: 'ID',
-					name: 'Name'
+					name: 'Name',
+					email: 'Email',
+					role: 'Role'
 				}"
 			></search-form>
 			<!-- /Search -->
@@ -54,30 +65,33 @@
 							<tr>
 								<th>ID</th>
 								<th>name</th>
-								<th>Link</th>
+								<th>Email</th>
+								<th>Role</th>
 								<th>Actions</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr
-								v-for="link in records"
-								:key="link.id"
+								v-for="user in records"
+								:key="user.id"
 							>
-								<td>{{ link.id }}</td>
-								<td>{{ link.name }}</td>
-								<td><a :href="link.goToURL">{{ link.goToURL }}</a></td>
+								<td>{{ user.id }}</td>
+								<td>{{ user.name }}</td>
+								<td>{{ user.email }}</td>
+								<td>{{ user.role }}</td>
 								<td>
 									<a
 										href="#"
 										class="btn btn-primary"
-										@click.prevent="edit(link)"
+										@click.prevent="edit(user)"
 									>
 										<i class="fas fa-pencil-alt"></i>&nbsp;&nbsp;Edit
 									</a>
 									<a
+										v-if="user.id != $auth.id"
 										href="#"
 										class="btn btn-danger"
-										@click.prevent="destroy(link)"
+										@click.prevent="destroy(user)"
 									>
 										<i class="fas fa-trash-alt"></i>&nbsp;&nbsp;Delete
 									</a>
@@ -99,12 +113,12 @@
 			<!-- /Pagination -->
 		</div>
 
-		<link-form
+		<user-form
 			:api-url="saveUrl"
 			:group="group"
 			:show="showForm"
 			@close="showForm = false"
-		></link-form>
+		></user-form>
 	</div>
 </template>
 
@@ -118,7 +132,7 @@ export default {
 	data() {
 		return {
 			showForm: false,
-			group: 'affiliateLinks'
+			group: 'users'
 		};
 	}
 }

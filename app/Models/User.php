@@ -29,4 +29,12 @@ class User extends Authenticatable {
 	public function affiliateLinks() {
 		return $this->hasMany(AffiliateLink::class, 'userID');
 	}
+
+	public function isUser() {
+		return $this->role == 'user';
+	}
+
+	public function isAdmin() {
+		return $this->role == 'admin';
+	}
 }

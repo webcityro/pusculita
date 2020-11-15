@@ -12,6 +12,10 @@
     <!-- Scripts -->
     @larasearchHead(true)
 
+    <script>
+        window.Auth = {!! auth()->user() !!};
+    </script>
+
     <script src="{{ mix('js/app.js') }}" defer></script>
 
     <!-- Fonts -->

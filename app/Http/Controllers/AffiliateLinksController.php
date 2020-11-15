@@ -31,10 +31,11 @@ class AffiliateLinksController extends Controller {
 		$affiliateLink = Auth::user()->affiliateLinks()->where('originalURL', $request->input('originalURL'))->whereNull('payed')->first();
 
 		if ($affiliateLink) {
-			return response()->json([
-				'record' => new AffiliateLinksResource($affiliateLink),
-				'message' => 'The affiliate link "'.$affiliateLink->originalURL.'" already exists with the name "'.$affiliateLink->name.'".'
-			], 304);
+			return $this->apiResponse(
+				new AffiliateLinksResource($affiliateLink),
+				'The affiliate link "'.$affiliateLink->originalURL.'" already exists with the name "'.$affiliateLink->name.'".',
+				304
+			);
 		}
 
 		$apiResponse = $api->call('POST', 'affiliate-links', [
@@ -48,10 +49,11 @@ class AffiliateLinksController extends Controller {
 			'affiliateURL' => $apiResponse->result[0]->ps_url,
 		]);
 
-		return response()->json([
-			'record' => new AffiliateLinksResource($affiliateLink),
-			'message' => 'The affiliate link "'.$affiliateLink->name.'" was added successfully!'
-		], 201);
+		return $this->apiResponse(
+			new AffiliateLinksResource($affiliateLink),
+			'The affiliate link "'.$affiliateLink->name.'" was added successfully!',
+			201
+		);
 	}
 
 	public function show(AffiliateLink $affiliateLink) {
@@ -63,17 +65,17 @@ class AffiliateLinksController extends Controller {
 		AffiliateLink $affiliateLink
 	) {
 		$affiliateLink->update(['name' => $request->name]);
-		return response()->json([
-			'record' => new AffiliateLinksResource($affiliateLink->fresh()),
-			'message' => 'The affiliate link "'.$affiliateLink->name.'" was renamed to "'.$request->name.'" successfully!'
-		], 200);
+		return $this->apiResponse(
+			new AffiliateLinksResource($affiliateLink->fresh()),
+			'The affiliate link "'.$affiliateLink->name.'" was renamed to "'.$request->name.'" successfully!'
+		);
 	}
 
 	public function destroy(AffiliateLink $affiliateLink) {
 		$affiliateLink->delete();
-		return response()->json([
-			'record' => new AffiliateLinksResource($affiliateLink),
-			'message' => 'The affiliate link "'.$affiliateLink->name.'" was deleted successfully!'
-		], 200);
+		return $this->apiResponse(
+			new AffiliateLinksResource($affiliateLink),
+			'The affiliate link "'.$affiliateLink->name.'" was deleted successfully!'
+		);
 	}
 }

@@ -22,8 +22,8 @@
 					:error="error"
 					v-model="fields.name"
 					:rules="{
-						required: 'The Name field is required.',
-						'lengthRange:3,50': 'The Name field must contain between 3 and 50 characters.'
+						required: 'The Name is required.',
+						'lengthRange:3,50': 'The Name must contain between 3 and 50 characters.'
 					}"
 				/>
 
@@ -34,7 +34,7 @@
 					:error="error"
 					v-model="fields.originalURL"
 					:rules="{
-						required: 'The Product originalURL field is required.',
+						required: 'The Product originalURL is required.',
 					}"
 					:disabled="editing"
 				/>
